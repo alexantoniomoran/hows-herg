@@ -1,0 +1,10 @@
+import os
+
+
+SEND_PHONE_NUMBER = os.environ["SEND_PHONE_NUMBER"]
+
+TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
+TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+TWILIO_PHONE_NUMBER = os.environ["TWILIO_PHONE_NUMBER"]
+
+TWILIO_DEFAULT_MESSAGE = "Hey Buddy! How ya feeling today??"
