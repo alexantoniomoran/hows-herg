@@ -8,9 +8,14 @@ https://docs.djangoproject.com/en/3.0/howto/deployment/wsgi/
 """
 
 import os
+import sys
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'website.settings')
+
+sys.path.append("/Users/alexmoran0551/code/hows-herg/website")
+sys.path.append("/Users/alexmoran0551/code/hows-herg/website/head")
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'head.settings')
 
 application = get_wsgi_application()
