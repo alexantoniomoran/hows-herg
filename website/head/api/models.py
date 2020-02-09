@@ -14,6 +14,10 @@ class MessageBody(models.Model):
 
     objects = MessageBodyManager()
 
+    class Meta:
+        verbose_name = "Message Body"
+        verbose_name_plural = "Message Bodies"
+
 
 class MessageSent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,6 +39,11 @@ class MessageSent(models.Model):
     price_unit = models.CharField(max_length=31, null=True, blank=True)
     message_service_sid = models.CharField(max_length=64, null=True, blank=True)
     sid = models.CharField(max_length=64, null=True, blank=True)
+
+
+    class Meta:
+        verbose_name = "Message Sent"
+        verbose_name_plural = "Messages Sent"
 
 
 class MessageReceive(models.Model):
@@ -65,3 +74,8 @@ class MessageReceive(models.Model):
     sms_sid = models.CharField(max_length=64, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        verbose_name = "Message Received"
+        verbose_name_plural = "Messages Received"

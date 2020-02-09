@@ -22,7 +22,7 @@ class Command(BaseCommand):
         )
 
     def get_twilio_client(self, **options):
-        if "test" in options:
+        if "test" in options and options["test"]:
             return Client(TWILIO_ACCOUNT_SID_TEST, TWILIO_AUTH_TOKEN_TEST)
         return Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 

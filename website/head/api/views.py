@@ -22,7 +22,7 @@ class MessageReceiveViewSet(
         for key in message_receive_body_dict:
             received_data = None
             if key in data:
-                received_data = data[key]
+                received_data = data[key][0]
 
             payload[message_receive_body_dict[key]] = received_data
 
@@ -41,14 +41,13 @@ class MessageReceiveViewSet(
         return resp, message_body, body
 
     def create(self, request, *args, **kwargs):
-        import pdb; pdb.set_trace()  #########################
         data = dict(request.data)
         payload = self._create_object_payload(data)
 
         resp, message_body, body = self._reply_to_sender(payload)
         payload["message_response_sent"] = message_body
 
-        message_received = MessageReceive(payload)
+        message_received = MessageReceive(**payload)
         message_received.save()
 
         resp.message(body)
