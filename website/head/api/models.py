@@ -40,7 +40,6 @@ class MessageSent(models.Model):
     message_service_sid = models.CharField(max_length=64, null=True, blank=True)
     sid = models.CharField(max_length=64, null=True, blank=True)
 
-
     class Meta:
         verbose_name = "Message Sent"
         verbose_name_plural = "Messages Sent"
@@ -74,7 +73,6 @@ class MessageReceive(models.Model):
     sms_sid = models.CharField(max_length=64, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         verbose_name = "Message Received"
