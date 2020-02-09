@@ -29,7 +29,7 @@ class Command(BaseCommand):
     def save_message(self, message_body, message):
         message_sent = MessageSent(
             message_body=message_body,
-            message_body_text=message.body,
+            message_sent=message.body,
             status=message.status,
             error_code=message.error_code,
             error_message=message.error_message,

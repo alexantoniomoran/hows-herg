@@ -28,7 +28,7 @@ class MessageSent(models.Model):
         blank=True,
         on_delete=SET_NULL,
     )
-    message_body_text = models.CharField(max_length=511, null=True, blank=True)
+    message_sent = models.CharField(max_length=511, null=True, blank=True)
     message_from_number = models.CharField(max_length=16, null=True, blank=True)
     message_to_number = models.CharField(max_length=16, null=True, blank=True)
 
@@ -47,7 +47,7 @@ class MessageSent(models.Model):
 
 
 class MessageReceive(models.Model):
-    message_body = models.CharField(max_length=1024, null=True, blank=True)
+    message_received = models.CharField(max_length=1024, null=True, blank=True)
     message_response_sent = models.ForeignKey(
         "messagebody",
         related_name="messages_received",

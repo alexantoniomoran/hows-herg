@@ -9,8 +9,8 @@ class MessageBodyAdmin(admin.ModelAdmin):
 class MessageReceiveAdmin(admin.ModelAdmin):
     list_display = (
         "id",
+        "message_received",
         "message_response_sent_message",
-        "message_body",
         "created_at",
     )
 
@@ -19,9 +19,13 @@ class MessageReceiveAdmin(admin.ModelAdmin):
             return obj.message_response_sent.message
         return ""
 
+    message_response_sent_message.short_description = (
+        "Message Sent Back to Confirm Feelings Received"
+    )
+
 
 class MessageSentAdmin(admin.ModelAdmin):
-    list_display = ("id", "message_body_text", "created_at")
+    list_display = ("id", "message_sent", "created_at")
 
 
 admin.site.register(MessageBody, MessageBodyAdmin)

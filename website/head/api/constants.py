@@ -11,7 +11,7 @@ TWILIO_PHONE_NUMBER = os.environ["TWILIO_PHONE_NUMBER"]
 
 message_receive_body_dict = {
     "AccountSid": "account_sid",
-    "Body": "message_body",
+    "Body": "message_received",
     "From": "message_from_number",
     "FromCity": "message_from_city",
     "FromCountry": "message_from_country",

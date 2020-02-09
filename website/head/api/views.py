@@ -30,7 +30,7 @@ class MessageReceiveViewSet(
 
     def _reply_to_sender(self, payload):
         resp = MessagingResponse()
-        if not payload["message_body"]:
+        if not payload["message_received"]:
             message_body, body = MessageBody.objects.get_random_message_body(
                 MESSAGE_RESPOND_BAD
             )
