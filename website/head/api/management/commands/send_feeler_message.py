@@ -1,33 +1,29 @@
 from django.core.management.base import BaseCommand
-from random import randint
 from twilio.rest import Client
 
 from head.api.constants import (
+    MESSAGE_TO_SEND,
     SEND_PHONE_NUMBER,
     TWILIO_ACCOUNT_SID,
+    TWILIO_ACCOUNT_SID_TEST,
     TWILIO_AUTH_TOKEN,
-    TWILIO_DEFAULT_MESSAGE,
+    TWILIO_AUTH_TOKEN_TEST,
     TWILIO_PHONE_NUMBER,
 )
 from head.api.models import MessageBody, MessageSent
 
 
 class Command(BaseCommand):
-    help = "Sends message to Herg to ask about how he's feeling"
+    help = "Sends message to SEND_PHONE_NUMBER to ask about how they're feeling"
 
-    def get_message_body(self):
-        message_body = None
-        body = TWILIO_DEFAULT_MESSAGE
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--test", action="store_true", help="Send test message",
+        )
 
-        message_bodies = MessageBody.objects.all()
-        if message_bodies:
-            message_id = randint(0, len(message_bodies) - 1)
-            message_body = message_bodies[message_id]
-            body = message_body.message
-
-        return message_body, body
-
-    def get_twilio_client(self):
+    def get_twilio_client(self, **options):
+        if "test" in options:
+            return Client(TWILIO_ACCOUNT_SID_TEST, TWILIO_AUTH_TOKEN_TEST)
         return Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
     def save_message(self, message_body, message):
@@ -39,13 +35,19 @@ class Command(BaseCommand):
             error_message=message.error_message,
             price=message.price,
             price_unit=message.price_unit,
+            message_from_number=message.from_,
+            message_service_sid=message.messaging_service_sid,
+            sid=message.sid,
+            message_to_number=message.to,
         )
         message_sent.save()
 
-    def send_daily_message(self):
-        message_body, body = self.get_message_body()
+    def send_daily_message(self, **options):
+        message_body, body = MessageBody.objects.get_random_message_body(
+            MESSAGE_TO_SEND
+        )
 
-        client = self.get_twilio_client()
+        client = self.get_twilio_client(**options)
         message = client.messages.create(
             to=SEND_PHONE_NUMBER, from_=TWILIO_PHONE_NUMBER, body=body,
         )
@@ -53,4 +55,4 @@ class Command(BaseCommand):
         self.save_message(message_body, message)
 
     def handle(self, *args, **options):
-        self.send_daily_message()
+        self.send_daily_message(**options)

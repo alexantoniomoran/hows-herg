@@ -6,7 +6,11 @@ certifi==2019.11.28
 chardet==3.0.4
 Click==7.0
 Django==3.0.3
+django-braces==1.14.0
+django-filter==2.2.0
+djangorestframework==3.11.0
 idna==2.8
+Markdown==3.2
 pathspec==0.7.0
 PyJWT==1.7.1
 pytz==2019.3
