@@ -22,7 +22,7 @@ class Command(BaseCommand):
         )
 
     def get_twilio_client(self, **options):
-        if "test" in options and options["test"]:
+        if options["test"]:
             return Client(TWILIO_ACCOUNT_SID_TEST, TWILIO_AUTH_TOKEN_TEST)
         return Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
@@ -50,13 +50,13 @@ class Command(BaseCommand):
         )
 
         client = self.get_twilio_client(**options)
-        message = client.messages.create(
-            to=SEND_PHONE_NUMBER, from_=TWILIO_PHONE_NUMBER, body=body,
-        )
-
-        payload = self.get_payload(message)
-        payload["message_body"] = message_body
-        self.save_message(payload)
+        if not options["test"]:
+            message = client.messages.create(
+                to=SEND_PHONE_NUMBER, from_=TWILIO_PHONE_NUMBER, body=body,
+            )
+            payload = self.get_payload(message)
+            payload["message_body"] = message_body
+            self.save_message(payload)
 
     def handle(self, *args, **options):
         self.send_daily_message(**options)

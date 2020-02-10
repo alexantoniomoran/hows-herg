@@ -1,4 +1,7 @@
 import os
+import pytz
+
+from datetime import datetime
 
 
 SEND_PHONE_NUMBER = os.environ["SEND_PHONE_NUMBER"]
@@ -48,3 +51,8 @@ TWILIO_DEFAULT_MESSAGES = {
     MESSAGE_RESPOND_BAD: TWILIO_DEFAULT_MESSAGE_RESPOND_BAD,
     MESSAGE_RESPOND_GOOD: TWILIO_DEFAULT_MESSAGE_RESPOND_GOOD,
 }
+
+NY_TIME_NOW = datetime.now(pytz.timezone("America/New_York")).replace(
+    microsecond=0, tzinfo=None
+)
+DEFAULT_DISPLAY_MESSAGE = "No feelings to report :'("

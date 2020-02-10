@@ -1,13 +1,18 @@
+import pytz
+
 from rest_framework import mixins, viewsets
 from django.http import HttpResponse
+from django.views.generic import TemplateView
 from braces.views import CsrfExemptMixin
-
 from twilio.twiml.messaging_response import MessagingResponse
 
 from head.api.constants import (
+    DEFAULT_DISPLAY_MESSAGE,
     message_receive_body_dict,
     MESSAGE_RESPOND_BAD,
     MESSAGE_RESPOND_GOOD,
+    NY_TIME_NOW,
+    SEND_PHONE_NUMBER,
 )
 from head.api.models import MessageBody, MessageReceive
 
@@ -26,6 +31,7 @@ class MessageReceiveViewSet(
 
             payload[message_receive_body_dict[key]] = received_data
 
+        payload["message_received"] = payload["message_received"][:1024]
         return payload
 
     def _reply_to_sender(self, payload):
@@ -52,3 +58,24 @@ class MessageReceiveViewSet(
 
         resp.message(body)
         return HttpResponse(resp)
+
+
+class MainPageView(TemplateView):
+    template_name = "main_page.html"
+
+    def get_context_data(self, **kwargs):
+        message = (
+            MessageReceive.objects.filter(message_from_number=SEND_PHONE_NUMBER)
+            .order_by("-created_at")
+            .first()
+        )
+
+        display_time = NY_TIME_NOW
+        display_message = DEFAULT_DISPLAY_MESSAGE
+        if message:
+            display_time = message.created_at.astimezone(pytz.timezone("US/Eastern"))
+            display_message = message.message_received
+
+        kwargs["display_time"] = display_time.strftime("%I:%M%p EST on %-m/%-d/%y")
+        kwargs["display_message"] = display_message
+        return super(MainPageView, self).get_context_data(**kwargs)

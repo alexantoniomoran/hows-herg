@@ -5,7 +5,6 @@ from head.api.constants import TWILIO_DEFAULT_MESSAGES
 
 
 class MessageBodyManager(models.Manager):
-
     def get_random_message_body(self, message_type):
         message_body = None
         body = TWILIO_DEFAULT_MESSAGES[message_type]
