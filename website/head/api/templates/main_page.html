@@ -16,14 +16,16 @@
             .box {
                 margin-left: auto;
                 margin-right: auto;
-                width: 28em;
+                width: 35em;
                 background-color: white;
                 padding: 3px;
+                overflow-y: scroll;
+                height: 40%;
             }
             P.display-time {
                 margin-left: auto;
                 margin-right: auto;
-                width: 33em;
+                width: 40em;
                 color: black;
                 font-size: small;
                 font-family: sans-serif;
@@ -33,12 +35,11 @@
             P.message {
                 margin-left: auto;
                 margin-right: auto;
-                width: 25em;
+                width: 32em;
                 background-color: white;
                 text-align: justify;
                 font-family: Arial;
-                overflow-y: scroll;
-                height: 20%;
+                padding-bottom: 35px;
             }
             .footer {
                 position: absolute;
@@ -58,8 +59,10 @@
     <body>
         <h1>How's Herg Feeling?</h1>
         <div class="box">
-            <p class="display-time">Text received from Herg at {{ display_time }}:</p>
-            <p class="message">{{ display_message }}</p>
+            {% for message in messages %}
+                <p class="display-time">Feelings received at {{ message.display_time }}:</p>
+                <p class="message">{{ message.display_message }}</p>
+            {% endfor %}
         </div>
         <div class="footer">
             Made by Herg enthusiasts, for Herg enthusiasts.

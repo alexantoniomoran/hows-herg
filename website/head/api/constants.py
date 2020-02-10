@@ -1,5 +1,4 @@
 import os
-import pytz
 
 from datetime import datetime
 
@@ -11,6 +10,8 @@ TWILIO_ACCOUNT_SID_TEST = os.environ["TWILIO_ACCOUNT_SID_TEST"]
 TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
 TWILIO_AUTH_TOKEN_TEST = os.environ["TWILIO_AUTH_TOKEN_TEST"]
 TWILIO_PHONE_NUMBER = os.environ["TWILIO_PHONE_NUMBER"]
+
+NUM_MESSAGES_TO_SHOW = int(os.getenv("NUM_MESSAGES_TO_SHOW", "7"))
 
 message_receive_body_dict = {
     "AccountSid": "account_sid",
@@ -52,7 +53,5 @@ TWILIO_DEFAULT_MESSAGES = {
     MESSAGE_RESPOND_GOOD: TWILIO_DEFAULT_MESSAGE_RESPOND_GOOD,
 }
 
-NY_TIME_NOW = datetime.now(pytz.timezone("America/New_York")).replace(
-    microsecond=0, tzinfo=None
-)
-DEFAULT_DISPLAY_MESSAGE = "No feelings to report :'("
+NY_TIME_NOW = datetime.utcnow().replace(microsecond=0, tzinfo=None)
+DEFAULT_DISPLAY_MESSAGE = "Herg has no feelings to report :'("

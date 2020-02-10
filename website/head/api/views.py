@@ -11,6 +11,7 @@ from head.api.constants import (
     message_receive_body_dict,
     MESSAGE_RESPOND_BAD,
     MESSAGE_RESPOND_GOOD,
+    NUM_MESSAGES_TO_SHOW,
     NY_TIME_NOW,
     SEND_PHONE_NUMBER,
 )
@@ -63,19 +64,32 @@ class MessageReceiveViewSet(
 class MainPageView(TemplateView):
     template_name = "main_page.html"
 
-    def get_context_data(self, **kwargs):
-        message = (
-            MessageReceive.objects.filter(message_from_number=SEND_PHONE_NUMBER)
-            .order_by("-created_at")
-            .first()
+    def _format_date(self, date):
+        return date.astimezone(pytz.timezone("US/Eastern")).strftime(
+            "%-I:%M%p EST on %-m/%-d/%y"
         )
 
-        display_time = NY_TIME_NOW
-        display_message = DEFAULT_DISPLAY_MESSAGE
-        if message:
-            display_time = message.created_at.astimezone(pytz.timezone("US/Eastern"))
-            display_message = message.message_received
+    def get_context_data(self, **kwargs):
+        messages = MessageReceive.objects.filter(
+            message_from_number=SEND_PHONE_NUMBER
+        ).order_by("-created_at")[:NUM_MESSAGES_TO_SHOW]
 
-        kwargs["display_time"] = display_time.strftime("%I:%M%p EST on %-m/%-d/%y")
-        kwargs["display_message"] = display_message
+        messages_list = []
+        for message in messages:
+            messages_list.append(
+                {
+                    "display_time": self._format_date(message.created_at),
+                    "display_message": message.message_received,
+                }
+            )
+
+        if not messages:
+            messages_list.append(
+                {
+                    "display_time": self._format_date(NY_TIME_NOW),
+                    "display_message": DEFAULT_DISPLAY_MESSAGE,
+                }
+            )
+
+        kwargs["messages"] = messages_list
         return super(MainPageView, self).get_context_data(**kwargs)
