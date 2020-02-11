@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 
-ADMIN_ENABLED = os.getenv("NUM_MESSAGES_TO_SHOW", True)
+ADMIN_ENABLED = os.getenv("ADMIN_ENABLED", True)
 
 SEND_PHONE_NUMBER = os.environ["SEND_PHONE_NUMBER"]
 
