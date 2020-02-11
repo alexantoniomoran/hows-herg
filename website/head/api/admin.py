@@ -28,6 +28,7 @@ class MessageSentAdmin(admin.ModelAdmin):
     list_display = ("id", "message_sent", "created_at")
 
 
+
 admin.site.register(MessageBody, MessageBodyAdmin)
 admin.site.register(MessageReceive, MessageReceiveAdmin)
 admin.site.register(MessageSent, MessageSentAdmin)

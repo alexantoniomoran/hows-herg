@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 
 
+ADMIN_ENABLED = os.getenv("NUM_MESSAGES_TO_SHOW", True)
+
 SEND_PHONE_NUMBER = os.environ["SEND_PHONE_NUMBER"]
 
 TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
