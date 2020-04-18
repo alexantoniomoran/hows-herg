@@ -20,6 +20,13 @@ class MessageBody(models.Model):
 
 
 class MessageSent(models.Model):
+    SENT_FROM_TWILIO = "twilio"
+    SENT_FROM_WEBSITE = "website"
+    SENT_TYPE = (
+        (SENT_FROM_TWILIO, "Twilio"),
+        (SENT_FROM_WEBSITE, "Website"),
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     message_body = models.ForeignKey(
         "messagebody",
@@ -40,6 +47,10 @@ class MessageSent(models.Model):
     message_service_sid = models.CharField(max_length=64, null=True, blank=True)
     sid = models.CharField(max_length=64, null=True, blank=True)
 
+    sent_type = models.CharField(
+        max_length=32, choices=SENT_TYPE, default=SENT_FROM_TWILIO
+    )
+
     class Meta:
         verbose_name = "Message Sent"
         verbose_name_plural = "Messages Sent"
@@ -47,12 +58,19 @@ class MessageSent(models.Model):
 
 class MessageReceive(models.Model):
     message_received = models.CharField(max_length=1024, null=True, blank=True)
-    message_response_sent = models.ForeignKey(
-        "messagebody",
-        related_name="messages_received",
-        null=True,
+    message_responded_to = models.ForeignKey(
+        MessageSent,
         blank=True,
+        null=True,
         on_delete=SET_NULL,
+        related_name="message_responded_to",
+    )
+    message_response_sent = models.ForeignKey(
+        MessageBody,
+        blank=True,
+        null=True,
+        on_delete=SET_NULL,
+        related_name="messages_received",
     )
 
     message_from_number = models.CharField(max_length=16, null=True, blank=True)

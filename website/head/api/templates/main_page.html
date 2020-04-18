@@ -1,5 +1,4 @@
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <style>
@@ -41,6 +40,31 @@
                 font-family: Arial;
                 padding-bottom: 35px;
             }
+            form {
+              text-align: center;
+            }
+            .input-name {
+                margin-left: auto;
+                margin-right: auto;
+                width: 30em;
+                font-family: Arial;
+            }
+            .textarea-message {
+                margin-left: auto;
+                margin-right: auto;
+                width: 30em;
+                overflow-y: scroll;
+                text-align: justify;
+                height: 8%;
+                font-family: Arial;
+                resize: none;
+                margin-bottom: 10px;
+            }
+            .small-btn {
+                width: 90px;
+                height: 25px;
+                font-size: 11px;
+            }
             .footer {
                 position: relative;
                 bottom: 0;
@@ -51,8 +75,22 @@
                 font-size: small;
                 font-family: sans-serif;
                 font-style: italic;
-                padding-top: 20%;
+                padding-top: 12%;
                 padding-bottom: 5px;
+            }
+            .error {
+                margin-left: auto;
+                margin-right: auto;
+                width: 21em;
+                font-family: Arial;
+                background-color: lightcoral;
+            }
+            .success {
+                margin-left: auto;
+                margin-right: auto;
+                width: 21em;
+                font-family: Arial;
+                background-color: darkseagreen;
             }
         </style>
     </head>
@@ -61,10 +99,39 @@
         <h1>How's Herg Feeling?</h1>
         <div class="box">
             {% for message in messages %}
-                <p class="display-time">Feelings received at {{ message.display_time }}:</p>
+                {% if message.display_message_from %}
+                    <p class="display-time">"{{ message.display_message_from }}" texted Herg at {{ message.display_time }}:</p>
+                {% else %}
+                    <p class="display-time">Herg's feelings were received at {{ message.display_time }}:</p>
+                {% endif %}
                 <p class="message">{{ message.display_message }}</p>
             {% endfor %}
         </div>
+
+        <br />
+        <br />
+
+        <form method="POST" action="">
+            {% for error in errors %}
+                <div class="error">{{ error }}</div><br/>
+            {% endfor %}
+
+            {% if not errors and success %}<div class="success">{{ success }}</div><br/>{% endif %}
+
+            <input
+                    class="input-name" type="text" value="{{ from_name }}"
+                    name="from_name" placeholder="Your Name Here..."
+                    minlength="1" maxlength="64"
+            />
+            <br />
+            <textarea
+                    class="textarea-message" name="text_message"
+                    placeholder="Your Text Here..." maxlength="400"
+            >{% if text_message %}{{ text_message }}{% endif %}</textarea>
+            <br />
+            <button type="submit" class="btn btn-default small-btn"><strong>Text Herg!</strong></button>
+        </form>
+
         <div class="footer">
             Made by Herg enthusiasts, for Herg enthusiasts.
             Here's the

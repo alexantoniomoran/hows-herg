@@ -57,3 +57,5 @@ TWILIO_DEFAULT_MESSAGES = {
 
 NY_TIME_NOW = datetime.utcnow().replace(microsecond=0, tzinfo=None)
 DEFAULT_DISPLAY_MESSAGE = "Herg has no feelings to report :'("
+
+HERG_GREETING = "Herg! You've got a text from"
