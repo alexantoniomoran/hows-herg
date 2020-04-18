@@ -50,6 +50,8 @@ class MessageSent(models.Model):
     sent_type = models.CharField(
         max_length=32, choices=SENT_TYPE, default=SENT_FROM_TWILIO
     )
+    sent_from_website_name = models.CharField(max_length=64, null=True, blank=True)
+    sent_from_website_text = models.CharField(max_length=512, null=True, blank=True)
 
     class Meta:
         verbose_name = "Message Sent"
