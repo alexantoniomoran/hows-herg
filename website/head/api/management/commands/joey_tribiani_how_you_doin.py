@@ -1,3 +1,4 @@
+import datetime
 from django.core.management.base import BaseCommand
 from twilio.rest import Client
 
@@ -20,6 +21,10 @@ class Command(BaseCommand):
             "--test", action="store_true", help="Send test message",
         )
 
+        parser.add_argument(
+            "-fo", "--friday_only", action="store_true", help="Only send on Fridays",
+        )
+
     def get_twilio_client(self, **options):
         if options["test"]:
             return Client(TWILIO_ACCOUNT_SID_TEST, TWILIO_AUTH_TOKEN_TEST)
@@ -36,4 +41,6 @@ class Command(BaseCommand):
             save_message(payload)
 
     def handle(self, *args, **options):
-        self.send_daily_message(**options)
+        friday_only = options["friday_only"]
+        if not friday_only or datetime.datetime.utcnow().weekday() == 5:
+            self.send_daily_message(**options)

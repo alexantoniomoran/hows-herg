@@ -26,6 +26,7 @@ https://www.codementor.io/@jamesezechukwu/how-to-deploy-django-app-on-heroku-dts
 2. git add .
 3. git commit -m 'commit'
 4. git push heroku master
+5. heroku run python manage.py migrate
 
 
 ## Heroku Useful Commands
