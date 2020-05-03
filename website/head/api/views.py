@@ -6,6 +6,7 @@ from twilio.rest import Client
 
 from head.api.constants import (
     DEFAULT_DISPLAY_MESSAGE,
+    NUM_MESSAGES_TO_SHOW,
     NY_TIME_NOW,
     TWILIO_ACCOUNT_SID,
     TWILIO_AUTH_TOKEN,
@@ -41,8 +42,8 @@ class MainPageView(CsrfExemptMixin, MainPageMixin, TemplateView):
                 }
             )
 
-        kwargs["from_messages"] = from_messages
-        kwargs["to_messages"] = to_messages
+        kwargs["from_messages"] = from_messages[:NUM_MESSAGES_TO_SHOW]
+        kwargs["to_messages"] = to_messages[:NUM_MESSAGES_TO_SHOW]
         return super(MainPageView, self).get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
