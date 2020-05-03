@@ -23,16 +23,26 @@ class MainPageView(CsrfExemptMixin, MainPageMixin, TemplateView):
     template_name = "main_page.html"
 
     def get_context_data(self, **kwargs):
-        messages_list = self._get_sorted_messages()
-        if not messages_list:
-            messages_list.append(
+        from_messages = self._get_messages_from()
+        if not from_messages:
+            from_messages.append(
                 {
                     "display_time": self._format_date(NY_TIME_NOW),
                     "display_message": DEFAULT_DISPLAY_MESSAGE,
                 }
             )
 
-        kwargs["messages"] = messages_list
+        to_messages = self._get_messages_to()
+        if not to_messages:
+            to_messages.append(
+                {
+                    "display_time": self._format_date(NY_TIME_NOW),
+                    "display_message": "No texts sent :(",
+                }
+            )
+
+        kwargs["from_messages"] = from_messages
+        kwargs["to_messages"] = to_messages
         return super(MainPageView, self).get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):

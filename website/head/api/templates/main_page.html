@@ -10,31 +10,61 @@
                 text-align: center;
                 line-height: 5px;
                 padding-top: 20px;
-                padding-bottom: 100px;
+                padding-bottom: 50px;
+            }
+            .second-header {
+                display: inline-block;
+                color: white;
+                text-align: left;
+                line-height: 5px;
+                padding-top: 10px;
+                padding-bottom: 18px;
+                font-size: large;
+                font-family: cursive;
+                font-style: italic;
+                margin-right: 20em;
             }
             .box {
+                width: 80em;
+                text-align: center;
+            }
+            .left-box {
+                display: inline-block;
                 margin-left: auto;
                 margin-right: auto;
-                width: 35em;
+                width: 30em;
                 background-color: white;
-                padding: 3px;
+                padding-left: 10px;
+                padding-right: 10px;
+                overflow-y: scroll;
+                height: 40%;
+            }
+            .right-box {
+                display: inline-block;
+                margin-left: 4em;
+                margin-right: auto;
+                width: 30em;
+                background-color: white;
+                padding-left: 10px;
+                padding-right: 10px;
                 overflow-y: scroll;
                 height: 40%;
             }
             P.display-time {
                 margin-left: auto;
                 margin-right: auto;
-                width: 40em;
+                width: 37em;
                 color: black;
                 font-size: small;
                 font-family: sans-serif;
                 font-style: italic;
                 border-bottom: 2px dashed LightGray;
+                text-align: justify;
             }
             P.message {
                 margin-left: auto;
                 margin-right: auto;
-                width: 32em;
+                width: 30em;
                 background-color: white;
                 text-align: justify;
                 font-family: Arial;
@@ -46,24 +76,27 @@
             .input-name {
                 margin-left: auto;
                 margin-right: auto;
-                width: 30em;
+                width: 25em;
                 font-family: Arial;
+                font-size: 14px;
+                padding-bottom: 5px;
             }
             .textarea-message {
                 margin-left: auto;
                 margin-right: auto;
-                width: 30em;
+                width: 25em;
                 overflow-y: scroll;
                 text-align: justify;
-                height: 8%;
+                height: 10%;
+                font-size: 14px;
                 font-family: Arial;
                 resize: none;
                 margin-bottom: 10px;
             }
             .small-btn {
-                width: 90px;
-                height: 25px;
-                font-size: 11px;
+                width: 105px;
+                height: 33px;
+                font-size: 16px;
             }
             .footer {
                 position: relative;
@@ -75,7 +108,7 @@
                 font-size: small;
                 font-family: sans-serif;
                 font-style: italic;
-                padding-top: 12%;
+                padding-top: 10%;
                 padding-bottom: 5px;
             }
             .error {
@@ -97,45 +130,68 @@
 
     <body>
         <h1>How's Herg Feeling?</h1>
+
         <div class="box">
-            {% for message in messages %}
-                {% if message.display_message_from %}
-                    <p class="display-time">"{{ message.display_message_from }}" texted Herg at {{ message.display_time }}:</p>
-                {% else %}
-                    <p class="display-time">Herg's feelings were received at {{ message.display_time }}:</p>
-                {% endif %}
-                <p class="message">{{ message.display_message }}</p>
-            {% endfor %}
+            <div>
+                <div class="second-header">Feelings Reported by Herg..</div>
+                <div class="second-header">Texts Sent to Herg..</div>
+            </div>
+
+            <div class="left-box">
+                {% for message in from_messages %}
+                    {% if message.display_message_from %}
+                        <p class="display-time">"{{ message.display_message_from }}" texted Herg at {{ message.display_time }}:</p>
+                    {% else %}
+                        <p class="display-time">Herg's feelings were received at {{ message.display_time }}:</p>
+                    {% endif %}
+                    <p class="message">{{ message.display_message }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="right-box">
+                {% for message in to_messages %}
+                    {% if message.display_message_from %}
+                        <p class="display-time">"{{ message.display_message_from }}" texted Herg at {{ message.display_time }}:</p>
+                    {% else %}
+                        <p class="display-time">Herg's feelings were received at {{ message.display_time }}:</p>
+                    {% endif %}
+                    <p class="message">{{ message.display_message }}</p>
+                {% endfor %}
+            </div>
         </div>
 
-        <br />
-        <br />
+        <div>
 
-        <form method="POST" action="">
-            {% for error in errors %}
-                <div class="error">{{ error }}</div><br/>
-            {% endfor %}
-
-            {% if not errors and success %}<div class="success">{{ success }}</div><br/>{% endif %}
-
-            <input
-                    class="input-name" type="text" value="{{ from_name }}"
-                    name="from_name" placeholder="Your Name Here..."
-                    minlength="1" maxlength="64"
-            />
             <br />
-            <textarea
-                    class="textarea-message" name="text_message"
-                    placeholder="Your Text Here..." maxlength="400"
-            >{% if text_message %}{{ text_message }}{% endif %}</textarea>
             <br />
-            <button type="submit" class="btn btn-default small-btn"><strong>Text Herg!</strong></button>
-        </form>
+            <br />
 
-        <div class="footer">
-            Made by Herg enthusiasts, for Herg enthusiasts.
-            Here's the
-            <a href="https://github.com/alexantoniomoran/hows-herg" style="text-decoration: none;">code</a>!
+            <form method="POST" action="">
+                {% for error in errors %}
+                    <div class="error">{{ error }}</div><br/>
+                {% endfor %}
+
+                {% if not errors and success %}<div class="success">{{ success }}</div><br/>{% endif %}
+
+                <input
+                        class="input-name" type="text" value="{{ from_name }}"
+                        name="from_name" placeholder="Your Name Here..."
+                        minlength="1" maxlength="64"
+                />
+                <br />
+                <textarea
+                        class="textarea-message" name="text_message"
+                        placeholder="Your Text Here..." maxlength="400"
+                >{% if text_message %}{{ text_message }}{% endif %}</textarea>
+                <br />
+                <button type="submit" class="btn btn-default small-btn"><strong>Text Herg!</strong></button>
+            </form>
+
+            <div class="footer">
+                Made by Herg enthusiasts, for Herg enthusiasts.
+                Here's the
+                <a href="https://github.com/alexantoniomoran/hows-herg" style="text-decoration: none;">code</a>!
+            </div>
         </div>
     </body>
 

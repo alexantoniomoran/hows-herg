@@ -18,37 +18,42 @@ class MainPageMixin(object):
             "%-I:%M%p EST on %-m/%-d/%y"
         )
 
-    def _get_sorted_messages(self):
+    def _from_payload(self, message):
+        return {
+            "created_at": message.created_at,
+            "display_time": self._format_date(message.created_at),
+            "display_message": message.message_received,
+        }
+
+    def _to_payload(self, message):
+        return {
+            "created_at": message.created_at,
+            "display_time": self._format_date(message.created_at),
+            "display_message": message.sent_from_website_text,
+            "display_message_from": message.sent_from_website_name,
+        }
+
+    def _get_messages_from(self):
+        queryset = MessageReceive.objects.filter(message_from_number=SEND_PHONE_NUMBER)
+
         messages = []
+        for message in queryset:
+            messages.append(self._from_payload(message))
 
-        messages_from_herg = MessageReceive.objects.filter(
-            message_from_number=SEND_PHONE_NUMBER
-        )
-        messages_to_herg = MessageSent.objects.filter(
-            sent_type=MessageSent.SENT_FROM_WEBSITE
-        )
+        return sorted(messages, key=lambda x: x["created_at"])[::-1]
 
-        for qs in [messages_from_herg, messages_to_herg]:
-            for message in qs:
-                if hasattr(message, "sent_from_website_name"):
-                    if message.sent_from_website_name:
-                        messages.append(
-                            {
-                                "created_at": message.created_at,
-                                "display_time": self._format_date(message.created_at),
-                                "display_message": message.sent_from_website_text,
-                                "display_message_from": message.sent_from_website_name,
-                            }
-                        )
-                else:
-                    messages.append(
-                        {
-                            "created_at": message.created_at,
-                            "display_time": self._format_date(message.created_at),
-                            "display_message": message.message_received,
-                        }
-                    )
+    def _get_messages_to(self):
+        queryset = MessageSent.objects.filter(sent_type=MessageSent.SENT_FROM_WEBSITE)
 
+        messages = []
+        for message in queryset:
+            messages.append(self._to_payload(message))
+
+        return sorted(messages, key=lambda x: x["created_at"])[::-1]
+
+    def _get_sorted_messages(self):
+        messages = self._get_messages_from()
+        messages.extend(self._get_messages_to())
         return sorted(messages, key=lambda x: x["created_at"])[::-1][
             :NUM_MESSAGES_TO_SHOW
         ]
