@@ -62,3 +62,5 @@ WEBSITE_GREETING = "Herg! You've got a text from"
 WEBSITE_MESSAGE_ERROR = "Don't waste Herg's time with a blank text!"
 WEBSITE_NAME_ERROR = "Seriously? Tell Herg who you are."
 WEBSITE_SUCCESS = "Yay! Your message was sent to King Hergis!"
+
+DISPLAY_SIZE = (350, 350)

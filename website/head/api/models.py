@@ -1,7 +1,12 @@
+import os
+import cloudinary.uploader
+
+from django.conf import settings
 from django.db import models
 from django.db.models.deletion import SET_NULL
+from django.utils.safestring import mark_safe
 
-from head.api.constants import MESSAGE_TO_SEND, MESSAGE_TYPES
+from head.api.constants import DISPLAY_SIZE, MESSAGE_TO_SEND, MESSAGE_TYPES
 from head.api.managers import MessageBodyManager
 
 
@@ -97,3 +102,24 @@ class MessageReceive(models.Model):
     class Meta:
         verbose_name = "Message Received"
         verbose_name_plural = "Messages Received"
+
+
+class Picture(models.Model):
+    image = models.ImageField(upload_to="images/")
+    title = models.CharField(max_length=64)
+    description = models.CharField(max_length=512, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def thumbnail_image(self):
+        return mark_safe(
+            f'<img src="{self.image.url}" width={DISPLAY_SIZE[0]} height={DISPLAY_SIZE[1]} />'
+        )
+
+    def delete(self, *args, **kwargs):
+        if settings.DEBUG:
+            os.remove(os.path.join(settings.MEDIA_ROOT, self.image.name))
+        else:
+            cloudinary.uploader.destroy(self.image.name, invalidate=True)
+
+        super(Picture, self).delete(*args, **kwargs)

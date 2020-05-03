@@ -1,11 +1,14 @@
 from django.contrib import admin
-from head.api.models import MessageBody, MessageReceive, MessageSent
+
+from head.api.models import MessageBody, MessageReceive, MessageSent, Picture
 
 
+@admin.register(MessageBody)
 class MessageBodyAdmin(admin.ModelAdmin):
     list_display = ("id", "message", "message_type")
 
 
+@admin.register(MessageReceive)
 class MessageReceiveAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -24,11 +27,12 @@ class MessageReceiveAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(MessageSent)
 class MessageSentAdmin(admin.ModelAdmin):
     list_display = ("id", "message_sent", "created_at")
 
 
-
-admin.site.register(MessageBody, MessageBodyAdmin)
-admin.site.register(MessageReceive, MessageReceiveAdmin)
-admin.site.register(MessageSent, MessageSentAdmin)
+@admin.register(Picture)
+class PictureAdmin(admin.ModelAdmin):
+    list_display = ("title", "thumbnail_image", "description")
+    readonly_fields = ("thumbnail_image",)

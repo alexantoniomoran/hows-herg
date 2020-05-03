@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary_storage",
+    "cloudinary",
     "head.api",
 ]
 
@@ -64,6 +66,7 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
+                "django.template.context_processors.media",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -114,40 +117,31 @@ USE_TZ = True
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
-                       'pathname=%(pathname)s lineno=%(lineno)s ' +
-                       'funcname=%(funcName)s %(message)s'),
-            'datefmt': '%Y-%m-%d %H:%M:%S'
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": (
+                "%(asctime)s [%(process)d] [%(levelname)s] "
+                + "pathname=%(pathname)s lineno=%(lineno)s "
+                + "funcname=%(funcName)s %(message)s"
+            ),
+            "datefmt": "%Y-%m-%d %H:%M:%S",
         },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        }
+        "simple": {"format": "%(levelname)s %(message)s"},
     },
-    'handlers': {
-        'null': {
-            'level': 'DEBUG',
-            'class': 'logging.NullHandler',
+    "handlers": {
+        "null": {"level": "DEBUG", "class": "logging.NullHandler",},
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
         },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        }
     },
-    'loggers': {
-        'testlogger': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        }
-    }
+    "loggers": {"testlogger": {"handlers": ["console"], "level": "INFO",}},
 }
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -158,7 +152,13 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "live-static", "static-root"),)
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(PROJECT_DIR, "live-static", "media-root")
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ["CLOUD_NAME"],
+    "API_KEY": os.environ["CLOUD_API_KEY"],
+    "API_SECRET": os.environ["CLOUD_API_SECRET"],
+}
 
 import dj_database_url
 
