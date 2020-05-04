@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User as BaseUser
 
 from head.api.forms import CustomAuthForm
 from head.api.models import MessageBody, MessageReceive, MessageSent, Picture
@@ -42,17 +40,3 @@ class PictureAdmin(admin.ModelAdmin):
     fields = ("image", "title", "description")
     list_display = ("title", "thumbnail_image", "description")
     readonly_fields = ("thumbnail_image",)
-
-
-admin.site.unregister(BaseUser)
-
-
-@admin.register(BaseUser)
-class ChumpUserAdmin(UserAdmin):
-    def has_change_permission(self, request, obj=None):
-        print("GOT HERE!!!!")
-
-        if request.user.is_super_user():
-            return True
-        else:
-            return False
